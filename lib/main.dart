@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:adaptive_theme/adaptive_theme.dart';
+
 import 'views/AProposPage.dart';
 import 'views/ContactPage.dart';
 import 'views/ArticlesPage.dart';
-// import 'package:adaptive_theme/adaptive_theme.dart';
 
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final savedThemeMode = await AdaptiveTheme.getThemeMode();
+  runApp(MyApp(savedThemeMode: savedThemeMode));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AdaptiveThemeMode? savedThemeMode;
+
+  const MyApp({super.key, this.savedThemeMode});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
+    return AdaptiveTheme(
+      light: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 95, 0, 172),
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      dark: ThemeData.dark(),
+      initial: savedThemeMode ?? AdaptiveThemeMode.light,
+      builder: (theme, darkTheme) => MaterialApp(
+        title: 'Flutter Demo',
+        theme: theme,
+        darkTheme: darkTheme,
+        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      ),
     );
   }
 }
@@ -52,6 +62,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 'Menu',
                 style: TextStyle(color: Colors.white, fontSize: 24),
               ),
+            ),
+            ListTile(
+              title: const Text('Changer le thème'),
+              onTap: () {
+                final mode = AdaptiveTheme.of(context).mode;
+                if (mode.isLight) {
+                  AdaptiveTheme.of(context).setDark();
+                } else {
+                  AdaptiveTheme.of(context).setLight();
+                }
+                Navigator.pop(context);
+              },
             ),
             ListTile(
               title: const Text('À Propos'),
