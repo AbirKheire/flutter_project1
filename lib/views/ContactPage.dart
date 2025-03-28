@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// widget de la page de contact
 class ContactSection extends StatelessWidget {
   const ContactSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // retoune une scaffold contenant la structure de la page de contact
       appBar: AppBar(title: const Text("Contact")),
       body: const Padding(
         padding: EdgeInsets.all(20),
+        // formulaire 
         child: MyCustomForm(),
       ),
     );
   }
 }
 
+// widget du formulaire
 class MyCustomForm extends StatefulWidget {
   const MyCustomForm({super.key});
 
@@ -24,6 +28,7 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class MyCustomFormState extends State<MyCustomForm> {
+  // clé pour valider chaque formulaire
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -43,7 +48,7 @@ class MyCustomFormState extends State<MyCustomForm> {
       key: _formKey,
       child: Column(
         children: [
-          // --- Champ Nom ---
+          // champ prénom
           TextFormField(
             controller: _nameController,
             decoration: const InputDecoration(
@@ -56,7 +61,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
           const SizedBox(height: 16),
 
-          // --- Champ Email ---
+          // champ email
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
@@ -64,6 +69,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
+            // vérifie que le mail respecte le format abc@abc.abc
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Veuillez entrer votre adresse email';
@@ -76,7 +82,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
           const SizedBox(height: 16),
 
-          // --- Champ Message ---
+          // champ message
           TextFormField(
             controller: _messageController,
             decoration: const InputDecoration(
@@ -90,7 +96,7 @@ class MyCustomFormState extends State<MyCustomForm> {
 
           const SizedBox(height: 24),
 
-          // --- Bouton Envoyer ---
+          // bouton d'envoi du formulaire 
           ElevatedButton(
             onPressed: () async {
               if (_formKey.currentState!.validate()) {
@@ -105,10 +111,12 @@ class MyCustomFormState extends State<MyCustomForm> {
                     const SnackBar(content: Text('Message envoyé et enregistré localement !')),
                   );
                 } catch (e) {
+                  // message d'erreur
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Erreur lors de l\'enregistrement: $e')),
                   );
                 }
+                // vide les champs du formulaire après l'envoi
                 _nameController.clear();
                 _emailController.clear();
                 _messageController.clear();

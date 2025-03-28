@@ -47,8 +47,7 @@ dependencies:
   path_provider: ^2.0.11
 
   # Package shared preferences pour stocker les formulaires (path_provide ne fonctionne pas sur le web)
-
-
+  shared_preferences: ^2.2.2
 
 
 dev_dependencies:

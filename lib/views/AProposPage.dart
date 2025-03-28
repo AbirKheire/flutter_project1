@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 
+// Classe AProposSection contenant un widget sans état (page "à propos")
 class AProposSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //retourne une scaffold avec la structure du contenu
       appBar: AppBar(title: const Text("À Propos")),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
