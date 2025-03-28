@@ -1,3 +1,5 @@
+// views/ArticleDetailPage.dart//
+
 import 'package:flutter/material.dart';
 
 class ArticleDetailPage extends StatelessWidget {
