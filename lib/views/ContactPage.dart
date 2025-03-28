@@ -1,14 +1,15 @@
-//views/ContactPage.dart//
-
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactSection extends StatelessWidget {
+  const ContactSection({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Contact")),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+      body: const Padding(
+        padding: EdgeInsets.all(20),
         child: MyCustomForm(),
       ),
     );
@@ -41,8 +42,8 @@ class MyCustomFormState extends State<MyCustomForm> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // --- Champ Nom ---
           TextFormField(
             controller: _nameController,
             decoration: const InputDecoration(
@@ -52,7 +53,10 @@ class MyCustomFormState extends State<MyCustomForm> {
             validator: (value) =>
                 value == null || value.isEmpty ? 'Veuillez entrer votre nom' : null,
           ),
+
           const SizedBox(height: 16),
+
+          // --- Champ Email ---
           TextFormField(
             controller: _emailController,
             decoration: const InputDecoration(
@@ -69,7 +73,10 @@ class MyCustomFormState extends State<MyCustomForm> {
               return null;
             },
           ),
+
           const SizedBox(height: 16),
+
+          // --- Champ Message ---
           TextFormField(
             controller: _messageController,
             decoration: const InputDecoration(
@@ -80,21 +87,34 @@ class MyCustomFormState extends State<MyCustomForm> {
             validator: (value) =>
                 value == null || value.isEmpty ? 'Veuillez entrer un message' : null,
           ),
+
           const SizedBox(height: 24),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
+
+          // --- Bouton Envoyer ---
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                String response =
+                    'Nom: ${_nameController.text}, Email: ${_emailController.text}, Message: ${_messageController.text}';
+                try {
+                  final prefs = await SharedPreferences.getInstance();
+                  List<String> responses = prefs.getStringList('contact_responses') ?? [];
+                  responses.add(response);
+                  await prefs.setStringList('contact_responses', responses);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Message envoyé avec succès !')),
+                    const SnackBar(content: Text('Message envoyé et enregistré localement !')),
                   );
-                  _nameController.clear();
-                  _emailController.clear();
-                  _messageController.clear();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erreur lors de l\'enregistrement: $e')),
+                  );
                 }
-              },
-              child: const Text('Envoyer'),
-            ),
+                _nameController.clear();
+                _emailController.clear();
+                _messageController.clear();
+              }
+            },
+            child: const Text('Envoyer'),
           ),
         ],
       ),

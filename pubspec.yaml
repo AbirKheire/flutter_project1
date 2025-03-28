@@ -39,8 +39,16 @@ dependencies:
   # Pour les icônes iOS style Cupertino  # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+
   # Package firebase core
   firebase_core: ^2.25.4
+
+  # Package path_provider afin de stocker les formulaires sous format texte en local
+  path_provider: ^2.0.11
+
+  # Package shared preferences pour stocker les formulaires (path_provide ne fonctionne pas sur le web)
+
+
 
 
 dev_dependencies:

@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:adaptive_theme/adaptive_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 
 import 'views/AProposPage.dart';
 import 'views/ContactPage.dart';
